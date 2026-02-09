@@ -80,7 +80,6 @@ const EmployeeList = () => {
                 <th className="px-6 py-4">Employee</th>
                 <th className="px-6 py-4">Role</th>
                 <th className="px-6 py-4">Department</th>
-                <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4">Actions</th>
               </tr>
             </thead>
@@ -115,7 +114,6 @@ const EmployeeList = () => {
                     </td>
                     <td className="px-6 py-4">{emp.role}</td>
                     <td className="px-6 py-4">{emp.department}</td>
-                    <td className="px-6 py-4">{emp.status || "Active"}</td>
                     <td className="px-6 py-4">
                       <div className="flex space-x-3">
                         <Link 

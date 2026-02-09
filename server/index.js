@@ -4,10 +4,28 @@ const connectDB = require('./config/db.js');
 const cors = require('cors');
 const app = express();
 const NewModel = require('./models/Employee.js');
+const AdminModel = require('./models/admin.js')
+const authRoutes = require('./routes/auth.js');
 dotenv.config();
 app.use(cors());
 app.use(express.json());
 connectDB();
+app.use("/api/EmployeesDB/admin", authRoutes);
+app.post('/api/EmployeesDB/admin', async (req, res, next) => {
+  try {
+    const { email, password} = req.body;
+    if (!email === undefined || password === '') {
+      return res.status(400).json({ message: 'email and password are required' });
+    }
+    const doc = await AdminModel.create({
+      email,
+      password
+    });
+    res.status(201).json(doc);
+  } catch (err) {
+    next(err);
+  }
+});
 app.get('/api/EmployeesDB/new', async (req, res, next) => {
   try {
     const docs = await NewModel.find().lean();
