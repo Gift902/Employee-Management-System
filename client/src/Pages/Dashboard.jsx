@@ -1,8 +1,6 @@
 import React from 'react';
 import { useEmployee } from '../context/EmployeeContext';
 import { Users, UserCheck, UserPlus, Building2 } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
 const StatCard = ({ title, value, icon: Icon, color }) => (
   <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
     <div className="flex items-center justify-between">
@@ -16,35 +14,18 @@ const StatCard = ({ title, value, icon: Icon, color }) => (
     </div>
   </div>
 );
-
 const Dashboard = () => {
   const { employees } = useEmployee();
-
   const totalEmployees = employees.length;
   const activeEmployees = employees.filter(e => e.status === 'Active').length;
-  const newHires = employees.filter(e => {
-    const joinDate = new Date(e.joinDate);
-    const currentDate = new Date();
-    const diffTime = Math.abs(currentDate.getTime() - joinDate.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays <= 30;
-  }).length;
+  const newHires = employees.filter(e => {}).length;
   const departments = new Set(employees.map(e => e.department)).size;
-
-  const departmentData = Object.entries(
-    employees.reduce((acc, emp) => {
-      acc[emp.department] = (acc[emp.department] || 0) + 1;
-      return acc;
-    }, {})
-  ).map(([name, count]) => ({ name, count }));
-
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Dashboard Overview</h1>
         <p className="text-slate-500">Welcome back! Here's what's happening today.</p>
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         <StatCard
           title="Total Employees"
@@ -74,5 +55,4 @@ const Dashboard = () => {
     </div>
   );
 };
-
 export default Dashboard;
