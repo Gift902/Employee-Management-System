@@ -3,6 +3,7 @@ import axios from "axios";
 import { Mail, Lock } from "lucide-react";
 import { Link, useNavigate } from 'react-router-dom';
 const Login = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -13,14 +14,20 @@ const Login = () => {
     setError("");
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:3001/api/EmployeesDB/admin", {
-        email,
-        password,
-      });
-      console.log("Login success:", res.data);
-      navigate('/dashboard');
+      const res = await axios.post(
+        "http://localhost:3001/api/auth/login",
+        {
+          name,
+          email,
+          password,
+        }
+      );
+      localStorage.setItem("token", res.data.token);
+      navigate("/dashboard");
     } catch (err) {
-      setError("Invalid email or password");
+      setError(
+        err.response?.data?.message || "Login failed"
+      );
     } finally {
       setLoading(false);
     }

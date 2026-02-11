@@ -2,26 +2,48 @@ const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db.js');
 const cors = require('cors');
+const bcrypt = require("bcryptjs");
 const app = express();
 const NewModel = require('./models/Employee.js');
 const AdminModel = require('./models/admin.js')
 const authRoutes = require('./routes/auth.js');
+const authMiddleware = require('./middleware/auth.js');
 dotenv.config();
 app.use(cors());
 app.use(express.json());
 connectDB();
-app.use("/api/EmployeesDB/admin", authRoutes);
-app.post('/api/EmployeesDB/admin', async (req, res, next) => {
+app.use("/api/auth", authRoutes);
+app.get("/api/auth/me", authMiddleware, (req, res) => {
+  res.status(200).json(req.admin);
+});
+app.post("/api/EmployeesDB/admins", async (req, res, next) => {
   try {
-    const { email, password} = req.body;
-    if (!email === undefined || password === '') {
-      return res.status(400).json({ message: 'email and password are required' });
+    let { name, email, password } = req.body;
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        message: "Email, name and password are required",
+      });
     }
+    email = email.toLowerCase().trim();
+    const existingAdmin = await AdminModel.findOne({ email });
+    if (existingAdmin) {
+      return res.status(400).json({
+        message: "Admin already exists",
+      });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
     const doc = await AdminModel.create({
+      name,
       email,
-      password
+      password: hashedPassword,
     });
-    res.status(201).json(doc);
+    res.status(201).json({
+      message: "Admin created successfully",
+      admin: {
+        id: doc._id,
+        email: doc.email,
+      },
+    });
   } catch (err) {
     next(err);
   }

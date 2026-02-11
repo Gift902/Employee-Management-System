@@ -1,6 +1,28 @@
-import React from 'react';
-import { Bell, Search, Menu } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Bell, Search, Menu, User } from 'lucide-react';
+import axios from 'axios';
 const Header = ({ onMenuClick }) => {
+  const [admin, setAdmin] = useState(null); 
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchAdmin = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return setLoading(false);
+        const res = await axios.get("http://localhost:3001/api/auth/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setAdmin(res.data);
+      } catch (err) {
+        console.error("Error fetching admin:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAdmin();
+  }, []);
   return (
     <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6">
       <button 
@@ -21,19 +43,20 @@ const Header = ({ onMenuClick }) => {
       </div>
       <div className="flex items-center space-x-4">
         <div className="flex items-center space-x-3 pl-4 border-l border-slate-200">
-          <img
-            src="imgs/001.jpg"
-            alt="Admin"
-            className="w-8 h-8 rounded-full"
-          />
-          <div className="hidden md:block">
-            <p className="text-sm font-medium text-slate-700">Byishimo Gift</p>
-            <p className="text-xs text-slate-500">Administrator</p>
-          </div>
+          {admin ? (
+            <>
+              <div className="hidden md:block">
+                <p className="text-sm font-medium text-slate-700">{admin.name}</p>
+                <p className="text-xs text-slate-500">{admin.role || "Administrator"}</p>
+              </div>
+            </>
+          ) : (
+            // Fallback if admin not loaded yet
+            <User className="w-8 h-8 text-slate-400" />
+          )}
         </div>
       </div>
     </header>
   );
 };
-
 export default Header;

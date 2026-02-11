@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Mail, Lock, UserPlus } from "lucide-react";
+import { Mail, Lock, UserPlus, User } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 const Signup = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -15,12 +16,14 @@ const Signup = () => {
     setSuccess("");
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:3001/api/EmployeesDB/admin", {
+      const res = await axios.post("http://localhost:3001/api/EmployeesDB/admins", {
+        name,
         email,
         password,
       });
       console.log("Signup success:", res.data);
       setSuccess("Account created successfully. You can now log in.");
+      setName("");
       setEmail("");
       setPassword("");
       navigate('/');
@@ -55,6 +58,22 @@ const Signup = () => {
           </div>
         )}
         <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Name
+            </label>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input
+                type="name"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Username"
+                className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              />
+            </div>
+          </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
               Email

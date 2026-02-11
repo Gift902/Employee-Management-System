@@ -1,15 +1,19 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Users, Settings, LogOut } from 'lucide-react';
 import { cn } from '../utils/cn';
-
 const Sidebar = () => {
+  const navigate = useNavigate(); 
   const navItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
     { icon: Users, label: 'Employees', path: '/employees' },
     { icon: Settings, label: 'Settings', path: '/settings' },
   ];
-
+  const handleLogout = (e) => {
+    e.preventDefault(); 
+    localStorage.removeItem("token");
+    navigate("/");
+  };
   return (
     <div className="flex flex-col h-screen w-64 bg-slate-900 text-white border-r border-slate-800">
       <div className="p-6 flex items-center space-x-3 border-b border-slate-800">
@@ -18,7 +22,6 @@ const Sidebar = () => {
         </div>
         <span className="text-xl font-bold">EmpManager</span>
       </div>
-
       <nav className="flex-1 p-4 space-y-2">
         {navItems.map((item) => (
           <NavLink
@@ -38,15 +41,18 @@ const Sidebar = () => {
           </NavLink>
         ))}
       </nav>
-
       <div className="p-4 border-t border-slate-800">
-        <button className="flex items-center space-x-3 px-4 py-3 w-full rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
-          <LogOut className="w-5 h-5" />
-          <span>Logout</span>
-        </button>
+        <form>
+          <button
+            onClick={handleLogout}
+            className="flex items-center space-x-3 px-4 py-3 w-full rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
+          >
+            <LogOut className="w-5 h-5" />
+            <span>Logout</span>
+          </button>
+        </form>
       </div>
     </div>
   );
 };
-
 export default Sidebar;
