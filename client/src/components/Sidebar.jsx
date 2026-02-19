@@ -5,9 +5,8 @@ import { cn } from '../utils/cn';
 const Sidebar = () => {
   const navigate = useNavigate(); 
   const navItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
+    { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
     { icon: Users, label: 'Employees', path: '/employees' },
-    { icon: Settings, label: 'Settings', path: '/settings' },
   ];
   const handleLogout = (e) => {
     e.preventDefault(); 

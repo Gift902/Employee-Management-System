@@ -4,7 +4,6 @@ import { EmployeeProvider } from './context/EmployeeContext';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import EmployeeList from './Pages/EmployeeList';
-import Settings from './Pages/Settings';
 import EmployeeModal from './Pages/EmployeeModal';
 import EmployeeUpdate from './Pages/EmployeeUpdate';
 import Login from './Pages/Login';
@@ -27,7 +26,6 @@ function App() {
           >
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="employees" element={<EmployeeList />} />
-            <Route path="settings" element={<Settings />} />
           </Route>
           <Route path="/add" element={<EmployeeModal />} />
           <Route path="/update/:id" element={<EmployeeUpdate />} />

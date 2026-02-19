@@ -9,7 +9,6 @@ const EmployeeUpdate = () => {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [department, setDepartment] = useState("");
-  const [status, setStatus] = useState("Active");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
   useEffect(() => {
@@ -26,7 +25,6 @@ const EmployeeUpdate = () => {
         setEmail(emp.email);
         setRole(emp.role);
         setDepartment(emp.department);
-        setStatus(emp.status || "Active");
       } catch (err) {
         console.error("Error fetching employee:", err);
         alert("Employee not found");
@@ -44,7 +42,6 @@ const EmployeeUpdate = () => {
         email,
         role,
         department,
-        status,
       });
       navigate("/employees");
     } catch (err) {
@@ -124,20 +121,6 @@ const EmployeeUpdate = () => {
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              Status
-            </label>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-              <option value="On Leave">On Leave</option>
-            </select>
           </div>
           <div className="flex justify-end space-x-3 mt-6">
             <Link
